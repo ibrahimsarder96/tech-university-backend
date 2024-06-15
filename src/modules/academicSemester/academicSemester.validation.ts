@@ -25,5 +25,5 @@ const updateAcademicSemesterValidation = z.object({
 });
 export const academicSemesterValidaions = {
   createAcademicSemesterValidation,
-  updateAcademicSemesterValidation
+  updateAcademicSemesterValidation,
 };

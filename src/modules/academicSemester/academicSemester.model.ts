@@ -6,7 +6,6 @@ import {
 } from "./academicSemester.constant";
 import { TAcademicSemester } from "./academicSemester.interface";
 
-
 const academicSemesterSchema = new Schema<TAcademicSemester>(
   {
     name: {

@@ -6,6 +6,8 @@ import {
   TStudent,
   TUserName,
 } from "./student.interface";
+import AppError from "../../errors/AppError";
+import httpStatus from "http-status";
 
 const userNameSchema = new Schema<TUserName>({
   firstName: {
@@ -105,7 +107,10 @@ const studentSchema = new Schema<TStudent, StudentModel>(
       required: [true, "Email is required"],
       unique: true,
     },
-    contactNo: { type: String, required: [true, "Contact number is required"] },
+    contactNo: {
+      type: String,
+      required: [true, "Contact number is required"],
+    },
     emergencyContactNo: {
       type: String,
       required: [true, "Emergency contact number is required"],
@@ -142,6 +147,10 @@ const studentSchema = new Schema<TStudent, StudentModel>(
       type: Boolean,
       default: false,
     },
+    academicDepartment: {
+      type: Schema.Types.ObjectId,
+      ref: "AcademicDepartment",
+    },
   },
   {
     toJSON: {
@@ -152,12 +161,18 @@ const studentSchema = new Schema<TStudent, StudentModel>(
 
 // virtual
 studentSchema.virtual("fullName").get(function () {
-  return this.name.firstName + this.name.middleName + this.name.lastName;
+  return (
+    this.name.firstName + " " + this.name.middleName + " " + this.name.lastName
+  );
 });
 
 // Query Middleware
-studentSchema.pre("find", function (next) {
-  this.find({ isDeleted: { $ne: true } });
+studentSchema.pre("findOneAndUpdate", async function (next) {
+  const query = this.getQuery();
+  const isExistStudent = await Student.findOne(query);
+  if (!isExistStudent) {
+    throw new AppError(httpStatus.BAD_REQUEST, "Student Not Found");
+  }
   next();
 });
 
