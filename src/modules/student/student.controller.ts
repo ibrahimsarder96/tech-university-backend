@@ -3,7 +3,8 @@ import catchAsync from "../../utils/catchAsync";
 import httpStatus from "http-status";
 
 const getAllStudent = catchAsync(async (req, res) => {
-  const result = await studentServices.getAllStudentsFromDB();
+  const query = req.query;
+  const result = await studentServices.getAllStudentsFromDB(query);
   res.status(200).json({
     success: true,
     messege: "students retrieved successfully",
@@ -11,7 +12,7 @@ const getAllStudent = catchAsync(async (req, res) => {
   });
 });
 const getSingleStudent = catchAsync(async (req, res) => {
-  const id = req.params.studentId;
+  const { id } = req.params;
   const result = await studentServices.getSingleStudentFromDB(id);
   res.status(200).json({
     success: true,
@@ -20,9 +21,9 @@ const getSingleStudent = catchAsync(async (req, res) => {
   });
 });
 const updateStudent = catchAsync(async (req, res) => {
-  const { studentId } = req.params;
+  const { id } = req.params;
   const { student } = req.body;
-  const result = await studentServices.updateStudentIntoDB(studentId, student);
+  const result = await studentServices.updateStudentIntoDB(id, student);
   res.status(httpStatus.OK).json({
     success: true,
     message: "Student update Successfully!",
@@ -30,8 +31,8 @@ const updateStudent = catchAsync(async (req, res) => {
   });
 });
 const deleteStudent = catchAsync(async (req, res) => {
-  const { studentId } = req.params;
-  const result = await studentServices.deleteStudentintoDB(studentId);
+  const { id } = req.params;
+  const result = await studentServices.deleteStudentintoDB(id);
   res.status(httpStatus.OK).json({
     success: true,
     message: "student delete successfully",
