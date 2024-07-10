@@ -1,16 +1,16 @@
 import httpStatus from 'http-status';
 import QueryBuilder from '../../builder/QueryBuilder';
 import AppError from '../../errors/AppError';
-import { SemesterRegistration } from '../semesterRegistration/semesterRegistration.Model';
-import { AcademicFaculty } from '../academicFaculty/academicFaculty.model';
 import { AcademicDepartment } from '../academicDepartment/academicDepartment.model';
+import { AcademicFaculty } from '../academicFaculty/academicFaculty.model';
+import { TOfferedCourse } from './offeredCourse.interface';
+import { SemesterRegistration } from '../semesterRegistration/semesterRegistration.Model';
 import { Course } from '../course/course.model';
 import { Faculty } from '../faculty/faculty.model';
 import { OfferedCourse } from './offeredCourse.model';
 import { hasTimeConflict } from './offeredCourse.utils';
-import { TOfferedCourse } from './offeredCourse.interface';
 
-const createOfferedCourseIntoDB = async (payload: Partial<TOfferedCourse>) => {
+const createOfferedCourseIntoDB = async (payload: TOfferedCourse) => {
   const {
     semesterRegistration,
     academicFaculty,
@@ -58,7 +58,7 @@ const createOfferedCourseIntoDB = async (payload: Partial<TOfferedCourse>) => {
 
   const isAcademicDepartmentExits =
     await AcademicDepartment.findById(academicDepartment);
-  console.log(isAcademicDepartmentExits, 'payload', academicDepartment);
+
   if (!isAcademicDepartmentExits) {
     throw new AppError(httpStatus.NOT_FOUND, 'Academic Department not found !');
   }
