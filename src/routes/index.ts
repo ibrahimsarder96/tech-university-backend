@@ -9,6 +9,7 @@ import { SemesterRegistrationRoutes } from '../modules/semesterRegistration/seme
 import { OfferedCourseRoutes } from '../modules/offeredCourse/offeredCourse.route';
 import { AcademicFacultyRouters } from '../modules/academicFaculty/academicFaculty.route';
 import { AcademicDepartmentRouters } from '../modules/academicDepartment/academicDepartment.route';
+import { loginRoutes } from '../modules/auth/auth.route';
 const router = express.Router();
 
 const modulesRoute = [
@@ -51,6 +52,10 @@ const modulesRoute = [
   {
     path: '/offered-courses',
     route: OfferedCourseRoutes,
+  },
+  {
+    path: '/user-login',
+    route: loginRoutes,
   },
 ];
 modulesRoute.forEach((route) => router.use(route.path, route.route));
